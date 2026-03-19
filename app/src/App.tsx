@@ -1,385 +1,256 @@
-import { useState } from 'react';
-import { MapPin, Clock, ArrowRight, Instagram, Mail, Menu, X, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+
+const HERO_BG = 'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0311-scaled.jpg?w=1600&ssl=1';
+const SPRING_IMG = 'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0378-scaled.jpg?w=800&ssl=1';
+const STOREFRONT = 'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2026/03/435-front.jpeg?w=800&ssl=1';
+const LOGO = 'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2026/02/Red-and-Beige-Vintage-Bold-Typographic-Beauty-Salon-Logo-1.png?w=140&ssl=1';
+
+const PHOTOS = [
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0311-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0361-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0014-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0378-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0273-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0356-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0055-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0073-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0117-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0148-scaled.jpg?w=600&ssl=1',
+  'https://i0.wp.com/popupcollectivenyc.com/wp-content/uploads/2025/12/DSC_0289-scaled.jpg?w=600&ssl=1',
+];
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <Hero />
-      <About />
-      <BoothOptions />
-      <WhySellWithUs />
-      <Location />
-      <OurStory />
+      <Mission />
+      <PhotoCarousel />
+      <SpringSummer />
+      <LocationSection />
+      <ApplyCTA />
       <Footer />
     </div>
   );
 }
 
-// ── Navbar ──────────────────────────────────
+/* ─────────────────────── Navbar ─────────────────────── */
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', h);
+    return () => window.removeEventListener('scroll', h);
+  }, []);
+
+  const linkClass = scrolled
+    ? 'text-brand-charcoal hover:text-brand-red'
+    : 'text-white/90 hover:text-white';
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand/30">
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
-        <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="font-display text-xl font-semibold text-soft-black tracking-tight">
-          Pop-Up Collective
+    <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_0_rgba(0,0,0,.06)]' : ''}`}>
+      <div className="max-w-[1200px] mx-auto px-5 md:px-8 flex items-center justify-between h-[72px]">
+        <a href="#" onClick={e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); }}>
+          <img src={LOGO} alt="Pop-Up Collective NYC" className="h-[52px] w-auto" />
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
-          {['About', 'Booths', 'Location', 'Our Story'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-sm text-text-gray hover:text-charcoal transition-colors">
-              {item}
+        <div className="hidden md:flex items-center gap-7">
+          {[['HOME', '#'], ['Apply', '#apply'], ['Booth Options and Details', '#booths'], ['Log-In', 'https://popupcollectivenyc.com/log-in/'], ['Our Story', '#story']].map(([label, href]) => (
+            <a key={label} href={href} className={`text-[14px] font-semibold tracking-wide uppercase transition-colors ${linkClass}`}>
+              {label}
             </a>
           ))}
-          <a href="#apply" className="bg-terracotta text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-terracotta-dark transition-colors">
-            Apply Now
+        </div>
+
+        <div className="hidden md:flex items-center gap-3">
+          <a href="https://www.instagram.com/popupcollective.nyc/" target="_blank" rel="noopener noreferrer" className={`transition-colors ${linkClass}`}>
+            <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
+          </a>
+          <a href="https://www.facebook.com/people/Popupcollective-NYC/61583085854013/" target="_blank" rel="noopener noreferrer" className={`transition-colors ${linkClass}`}>
+            <svg className="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
           </a>
         </div>
 
-        <button onClick={() => setOpen(!open)} className="md:hidden p-2 text-charcoal">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        <button onClick={() => setOpen(!open)} className={`md:hidden ${scrolled ? 'text-brand-charcoal' : 'text-white'}`}>
+          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden bg-cream border-t border-sand/30 px-6 py-4 space-y-3">
-          {['About', 'Booths', 'Location', 'Our Story'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} onClick={() => setOpen(false)} className="block text-sm text-text-gray hover:text-charcoal py-1">
-              {item}
+        <div className="md:hidden bg-white px-5 py-5 space-y-3 border-t border-gray-100">
+          {['HOME', 'Apply', 'Booth Options', 'Log-In', 'Our Story'].map(label => (
+            <a key={label} href={`#${label.toLowerCase().replace(/ /g, '-')}`} onClick={() => setOpen(false)} className="block text-[14px] font-semibold uppercase text-brand-charcoal py-1">
+              {label}
             </a>
           ))}
-          <a href="#apply" onClick={() => setOpen(false)} className="block bg-terracotta text-white text-sm font-medium px-5 py-2.5 rounded-full text-center hover:bg-terracotta-dark transition-colors">
-            Apply Now
-          </a>
         </div>
       )}
     </nav>
   );
 }
 
-// ── Hero ──────────────────────────────────
+/* ─────────────────────── Hero ─────────────────────── */
 function Hero() {
   return (
-    <section className="pt-28 pb-20 md:pt-40 md:pb-32 px-6">
-      <div className="max-w-4xl mx-auto text-center">
-        <p className="text-sm tracking-[0.25em] uppercase text-terracotta font-medium mb-6">SoHo, New York City</p>
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-medium text-soft-black leading-[1.05] tracking-tight mb-6">
-          Pop-Up<br />Collective
+    <section className="relative h-screen min-h-[550px] max-h-[900px] flex items-center justify-center overflow-hidden">
+      <img src={HERO_BG} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50" />
+
+      <div className="relative z-10 text-center text-white px-6">
+        <h1 className="text-[clamp(2.8rem,9vw,6rem)] leading-[.95] font-extrabold uppercase tracking-tight">
+          Pop-Up Collective
         </h1>
-        <p className="text-lg md:text-xl text-text-gray max-w-xl mx-auto leading-relaxed mb-10">
-          A curated marketplace of makers, designers, doers and dreamers — together in one warm, creative space.
+        <p className="text-[clamp(1.2rem,3.5vw,2.2rem)] font-display font-bold mt-3 text-brand-orange-light">
+          SoHo 2026
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a href="#apply" className="bg-terracotta text-white font-medium px-8 py-3.5 rounded-full hover:bg-terracotta-dark transition-all text-sm flex items-center gap-2">
-            Apply for a Booth <ArrowRight className="w-4 h-4" />
-          </a>
-          <a href="#booths" className="border border-charcoal/20 text-charcoal font-medium px-8 py-3.5 rounded-full hover:bg-charcoal/5 transition-all text-sm">
-            View Booth Options
-          </a>
-        </div>
-
-        <div className="mt-16 flex items-center justify-center gap-8 md:gap-12 text-sm text-text-gray">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-terracotta" />
-            435 Broadway
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-terracotta" />
-            Open Daily 11am–7pm
-          </div>
-        </div>
-
-        <a href="#about" className="inline-block mt-12 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-text-light" />
+        <a href="#about" className="inline-block mt-14">
+          <svg className="w-7 h-7 text-white animate-bounce" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
         </a>
       </div>
     </section>
   );
 }
 
-// ── About ──────────────────────────────────
-function About() {
+/* ─────────────────────── Mission ─────────────────────── */
+function Mission() {
   return (
-    <section id="about" className="py-20 md:py-28 px-6 bg-warm-white">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm tracking-[0.2em] uppercase text-terracotta font-medium mb-4">Spring / Summer 2026</p>
-          <h2 className="font-display text-3xl md:text-5xl font-medium text-soft-black mb-6">
-            Where Small Brands Shine
-          </h2>
-          <p className="text-text-gray max-w-2xl mx-auto leading-relaxed">
-            Pop-Up Collective NYC brings together local designers, artists, and independent brands in one warm and creative space. Our mission is to make retail more flexible, collaborative, and inspiring.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            { number: '20+', label: 'Local Vendors', desc: 'Curated creators, designers, and small brands' },
-            { number: '435', label: 'Broadway, SoHo', desc: 'Prime foot traffic in NYC\'s most iconic shopping district' },
-            { number: '7', label: 'Days a Week', desc: 'Open daily from 11am to 7pm for maximum exposure' },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-cream rounded-2xl p-8 text-center">
-              <p className="font-display text-4xl md:text-5xl font-medium text-terracotta mb-2">{stat.number}</p>
-              <p className="text-sm font-semibold text-soft-black mb-1">{stat.label}</p>
-              <p className="text-xs text-text-gray">{stat.desc}</p>
-            </div>
-          ))}
+    <section id="about" className="py-20 md:py-28 px-5 md:px-8">
+      <div className="max-w-[1100px] mx-auto grid md:grid-cols-[1fr_1.1fr] gap-10 md:gap-20 items-start">
+        <h2 className="text-[clamp(1.5rem,3.2vw,2.2rem)] leading-[1.15] uppercase">
+          A pop-up marketplace of makers, designers, doers and dreamers.
+        </h2>
+        <div className="space-y-4 text-[15px] md:text-[16px] leading-[1.75] text-[#555]">
+          <p>Pop-Up Collective NYC brings together local designers, artists, and independent brands in one warm and creative space.</p>
+          <p>Our mission is to make retail more flexible, collaborative, and inspiring, so every maker has a chance to shine in New York City.</p>
         </div>
       </div>
     </section>
   );
 }
 
-// ── Booth Options ──────────────────────────
-function BoothOptions() {
+/* ─────────────────────── Photo Carousel ─────────────────────── */
+function PhotoCarousel() {
   return (
-    <section id="booths" className="py-20 md:py-28 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm tracking-[0.2em] uppercase text-terracotta font-medium mb-4">Flexible Options</p>
-          <h2 className="font-display text-3xl md:text-5xl font-medium text-soft-black mb-6">
-            Booth Options & Pricing
+    <section className="pb-10">
+      <div className="flex gap-2 overflow-x-auto px-5 md:px-8 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
+        {PHOTOS.map((src, i) => (
+          <div key={i} className="flex-shrink-0 snap-start w-[280px] md:w-[340px] aspect-[3/4] overflow-hidden">
+            <img src={src} alt="" className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────── Spring/Summer ─────────────────────── */
+function SpringSummer() {
+  return (
+    <section className="py-20 md:py-28 px-5 md:px-8">
+      <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-0 overflow-hidden">
+        <div className="bg-brand-cream p-10 md:p-14 flex flex-col justify-center">
+          <p className="text-[12px] font-bold tracking-[.2em] uppercase text-brand-orange mb-5">Pop-Up Collective</p>
+          <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] leading-[1.05] uppercase mb-3">
+            Spring/<span className="text-brand-red">Summer</span>
           </h2>
-          <p className="text-text-gray max-w-xl mx-auto leading-relaxed">
-            All booths are approximately 35 sq ft with table, chair, electricity, and WiFi included.
+          <h3 className="text-[17px] font-bold mb-4">Spring/Summer Market 2026</h3>
+          <p className="text-[15px] leading-[1.7] text-[#555] mb-8">
+            Discover 20+ local vendors, handmade gifts, art prints, jewelry, vintage finds & more. Come shop, meet creators, and enjoy the festive energy of NYC's most creative street.
           </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          <PricingCard
-            title="Weekly"
-            badge="Flexible"
-            price="$1,050"
-            period="/week"
-            features={['~35 sq ft booth space', '6ft table + chair included', 'Electricity & WiFi', 'Mon–Sun access', 'Starting from Tier C']}
-          />
-          <PricingCard
-            title="Monthly"
-            badge="30% OFF"
-            price="$2,985"
-            period="/month"
-            featured
-            features={['Everything in Weekly', 'Priority placement', 'Early commitment rate available', 'From $99/day', 'Starting from Tier C']}
-          />
-          <PricingCard
-            title="3-Month"
-            badge="35% OFF"
-            price="$2,795"
-            period="/month"
-            features={['Everything in Monthly', 'Premium placement', 'Window placement opportunities', 'From $93/day', 'Starting from Tier C']}
-          />
-        </div>
-
-        <div className="mt-12 bg-warm-white rounded-2xl p-8 md:p-10">
-          <h3 className="font-display text-xl font-medium text-soft-black mb-4">Placement Tiers</h3>
-          <div className="grid md:grid-cols-3 gap-6 text-sm">
-            <div>
-              <p className="font-semibold text-charcoal mb-1">Tier A — Front</p>
-              <p className="text-text-gray">Closest to the entrance and Broadway foot traffic.</p>
-            </div>
-            <div>
-              <p className="font-semibold text-charcoal mb-1">Tier B — Mid</p>
-              <p className="text-text-gray">Middle section with consistent visibility and traffic flow.</p>
-            </div>
-            <div>
-              <p className="font-semibold text-charcoal mb-1">Tier C — Rear</p>
-              <p className="text-text-gray">Rear section of the store, most affordable option.</p>
-            </div>
+          <div>
+            <a href="https://popupcollectivenyc.com/apply/" target="_blank" rel="noopener noreferrer"
+              className="inline-block bg-brand-red text-white text-[13px] font-bold uppercase tracking-[.1em] px-8 py-4 hover:bg-brand-red-dark transition-colors">
+              Join Today
+            </a>
           </div>
         </div>
-
-        <div id="apply" className="mt-12 text-center">
-          <a href="https://popupcollectivenyc.com/form/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-terracotta text-white font-medium px-10 py-4 rounded-full hover:bg-terracotta-dark transition-all text-sm">
-            Apply for a Booth <ArrowRight className="w-4 h-4" />
-          </a>
+        <div className="aspect-square md:aspect-auto min-h-[350px]">
+          <img src={SPRING_IMG} alt="Spring/Summer Market" className="w-full h-full object-cover" loading="lazy" />
         </div>
       </div>
     </section>
   );
 }
 
-function PricingCard({ title, badge, price, period, features, featured = false }: {
-  title: string; badge: string; price: string; period: string; features: string[]; featured?: boolean;
-}) {
+/* ─────────────────────── Booth Options ─────────────────────── */
+// (Linked from nav — scrolls to #booths on booth details page)
+
+/* ─────────────────────── Location ─────────────────────── */
+function LocationSection() {
   return (
-    <div className={`rounded-2xl p-8 ${featured ? 'bg-soft-black text-white ring-2 ring-terracotta' : 'bg-warm-white text-charcoal'}`}>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="font-display text-xl font-medium">{title}</h3>
-        <span className={`text-[10px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full ${featured ? 'bg-terracotta text-white' : 'bg-terracotta/10 text-terracotta'}`}>
-          {badge}
-        </span>
+    <section id="story" className="py-20 md:py-28 px-5 md:px-8 bg-brand-cream">
+      <div className="max-w-[1100px] mx-auto text-center">
+        <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] leading-[1.1] uppercase mb-3">
+          Located in <span className="text-brand-red">SoHo</span>, NYC
+        </h2>
+        <p className="text-[15px] text-[#555] mb-2 max-w-md mx-auto">
+          Our cozy space at 435 Broadway is surrounded by shops, boutiques, and creative studios — the perfect spot for a pop-up store.
+        </p>
+        <p className="text-[14px] text-brand-orange font-semibold mb-10">435 Broadway, New York, NY 10013</p>
+
+        <div className="grid md:grid-cols-2 gap-6 items-stretch">
+          <div className="overflow-hidden">
+            <img src={STOREFRONT} alt="435 Broadway" className="w-full h-full object-cover min-h-[300px]" loading="lazy" />
+          </div>
+          <div className="overflow-hidden min-h-[350px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.3!2d-74.0002!3d40.7225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598a7d8a4e43%3A0x1!2s435+Broadway+New+York+NY+10013!5e0!3m2!1sen!2sus!4v1"
+              width="100%" height="100%" style={{ border: 0, minHeight: '350px' }}
+              allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+              title="435 Broadway Map"
+            />
+          </div>
+        </div>
       </div>
-      <div className="mb-6">
-        <span className="text-3xl font-bold">{price}</span>
-        <span className={`text-sm ${featured ? 'text-white/60' : 'text-text-gray'}`}>{period}</span>
-      </div>
-      <ul className="space-y-3 mb-8">
-        {features.map((f) => (
-          <li key={f} className={`text-sm flex items-start gap-2 ${featured ? 'text-white/80' : 'text-text-gray'}`}>
-            <span className="text-terracotta mt-0.5">&#10003;</span> {f}
-          </li>
-        ))}
-      </ul>
-      <a
-        href="https://popupcollectivenyc.com/form/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`block text-center text-sm font-medium py-3 rounded-full transition-all ${
-          featured
-            ? 'bg-terracotta text-white hover:bg-terracotta-dark'
-            : 'border border-charcoal/20 text-charcoal hover:bg-charcoal/5'
-        }`}
-      >
+    </section>
+  );
+}
+
+/* ─────────────────────── Apply CTA ─────────────────────── */
+function ApplyCTA() {
+  return (
+    <section id="apply" className="py-24 md:py-32 px-5 md:px-8 text-center">
+      <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] leading-[1.1] uppercase mb-6">
+        Sell With Us?
+      </h2>
+      <a href="https://popupcollectivenyc.com/apply/" target="_blank" rel="noopener noreferrer"
+        className="inline-block bg-brand-red text-white text-[14px] font-bold uppercase tracking-[.1em] px-12 py-4 hover:bg-brand-red-dark transition-colors">
         Apply Now
       </a>
-    </div>
-  );
-}
-
-// ── Why Sell With Us ──────────────────────
-function WhySellWithUs() {
-  return (
-    <section className="py-20 md:py-28 px-6 bg-warm-white">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <p className="text-sm tracking-[0.2em] uppercase text-terracotta font-medium mb-4">Why Join Us</p>
-          <h2 className="font-display text-3xl md:text-5xl font-medium text-soft-black mb-6">
-            Built for Small Brands
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {[
-            { title: 'Prime SoHo Location', desc: 'High foot traffic from tourists and locals on Broadway, in the heart of NYC\'s most iconic shopping district.' },
-            { title: 'Curated Vendor Mix', desc: 'We carefully select diverse brands to create a vibrant, balanced market experience that attracts shoppers.' },
-            { title: 'Flexible Commitment', desc: 'Choose a weekend, a week, a month, or 3 months. We work with your timeline and budget.' },
-            { title: 'Supportive Community', desc: 'Get help with setup guidance, on-site coordination, and connect with fellow makers who share your vision.' },
-          ].map((item) => (
-            <div key={item.title} className="bg-cream rounded-2xl p-8">
-              <h3 className="font-display text-lg font-medium text-soft-black mb-2">{item.title}</h3>
-              <p className="text-sm text-text-gray leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
 
-// ── Location ──────────────────────────────
-function Location() {
-  return (
-    <section id="location" className="py-20 md:py-28 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-sm tracking-[0.2em] uppercase text-terracotta font-medium mb-4">Visit Us</p>
-            <h2 className="font-display text-3xl md:text-4xl font-medium text-soft-black mb-6">
-              Located in SoHo, NYC
-            </h2>
-            <p className="text-text-gray leading-relaxed mb-6">
-              Our space at 435 Broadway is surrounded by shops, boutiques, and creative studios — the perfect spot for a pop-up store in New York City.
-            </p>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-terracotta shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-charcoal">435 Broadway</p>
-                  <p className="text-text-gray">New York, NY 10013</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-terracotta shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-charcoal">Open Daily</p>
-                  <p className="text-text-gray">11:00 AM – 7:00 PM</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-terracotta shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-charcoal">Contact</p>
-                  <p className="text-text-gray">info@popupcollectivenyc.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-sand-light h-[350px] flex items-center justify-center">
-            <div className="text-center p-8">
-              <MapPin className="w-10 h-10 text-terracotta mx-auto mb-3" />
-              <p className="font-display text-lg font-medium text-soft-black">435 Broadway</p>
-              <p className="text-sm text-text-gray">New York, NY 10013</p>
-              <a href="https://maps.google.com/?q=435+Broadway+New+York+NY+10013" target="_blank" rel="noopener noreferrer" className="inline-block mt-4 text-sm text-terracotta hover:text-terracotta-dark font-medium">
-                Open in Google Maps &rarr;
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Our Story ──────────────────────────────
-function OurStory() {
-  return (
-    <section id="our-story" className="py-20 md:py-28 px-6 bg-warm-white">
-      <div className="max-w-3xl mx-auto text-center">
-        <p className="text-sm tracking-[0.2em] uppercase text-terracotta font-medium mb-4">Our Story</p>
-        <h2 className="font-display text-3xl md:text-5xl font-medium text-soft-black mb-8">
-          From Small Business Owner to Retail Curator
-        </h2>
-        <div className="text-text-gray leading-relaxed space-y-4 text-left md:text-center">
-          <p>
-            Pop-Up Collective NYC was founded by Lou, a student at Columbia University who started a small business selling press-on nails. Through that journey, she quickly learned how hard it is for small brands to find a sustainable place to showcase their products in the city.
-          </p>
-          <p>
-            That frustration turned into a vision: a space built for small businesses, by someone who truly understands what it's like to be one. What began as a one-month pop-up has grown into a larger presence in SoHo, bringing the concept to one of NYC's most iconic shopping destinations.
-          </p>
-        </div>
-
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
-          <div className="bg-cream rounded-xl px-6 py-4">
-            <p className="font-display text-lg font-medium text-soft-black">Nov 2025</p>
-            <p className="text-text-gray text-xs">First pop-up at 57 Bond St</p>
-          </div>
-          <ArrowRight className="w-4 h-4 text-text-light hidden sm:block" />
-          <div className="bg-cream rounded-xl px-6 py-4">
-            <p className="font-display text-lg font-medium text-soft-black">Apr 2026</p>
-            <p className="text-text-gray text-xs">Moving to 435 Broadway, SoHo</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ── Footer ──────────────────────────────────
+/* ─────────────────────── Footer ─────────────────────── */
 function Footer() {
   return (
-    <footer className="bg-soft-black text-white py-12 px-6">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
+    <footer className="bg-brand-cream border-t border-brand-cream-dark py-10 px-5 md:px-8">
+      <div className="max-w-[1100px] mx-auto">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
           <div>
-            <p className="font-display text-xl font-medium mb-2">Pop-Up Collective NYC</p>
-            <p className="text-sm text-white/50">A curated marketplace for makers and dreamers.</p>
+            <p className="font-display text-[17px] font-extrabold uppercase">Pop-Up Collective NYC</p>
+            <p className="text-[13px] text-[#888] mt-1">Got Questions?</p>
+            <p className="text-[13px] text-brand-red font-medium">Email info@popupcollectivenyc.com</p>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="https://www.instagram.com/popupcollective.nyc/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-              <Instagram className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <a href="https://www.instagram.com/popupcollective.nyc/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-brand-red flex items-center justify-center text-white hover:bg-brand-red-dark transition-colors">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
             </a>
-            <a href="mailto:info@popupcollectivenyc.com" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-              <Mail className="w-5 h-5" />
+            <a href="https://www.facebook.com/people/Popupcollective-NYC/61583085854013/" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-brand-red flex items-center justify-center text-white hover:bg-brand-red-dark transition-colors">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
             </a>
           </div>
         </div>
-        <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/40">
-          <p>&copy; {new Date().getFullYear()} Pop-Up Collective NYC. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="https://popupcollectivenyc.com/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-white/60 transition-colors">Terms & Conditions</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Privacy</a>
+        <div className="border-t border-brand-cream-dark pt-5 flex flex-col md:flex-row items-center justify-between gap-3 text-[12px] text-[#999]">
+          <div className="flex flex-wrap gap-4">
+            <a href="#" className="hover:text-brand-charcoal transition-colors">Home</a>
+            <a href="https://popupcollectivenyc.com/apply/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-charcoal transition-colors">Apply</a>
+            <a href="https://popupcollectivenyc.com/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="hover:text-brand-charcoal transition-colors">Terms & Conditions</a>
+            <span>Terms of Use</span>
+            <span>Privacy Notice</span>
           </div>
         </div>
       </div>

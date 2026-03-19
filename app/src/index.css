@@ -1,34 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #FAF7F2;
-  --color-warm-white: #FDF9F4;
-  --color-charcoal: #2C2C2C;
-  --color-soft-black: #1A1A1A;
-  --color-terracotta: #C4704B;
-  --color-terracotta-dark: #A85D3B;
-  --color-sage: #8B9A7E;
-  --color-sage-dark: #6D7D62;
-  --color-sand: #D4C5A9;
-  --color-sand-light: #E8DCC8;
-  --color-text-gray: #6B6B6B;
-  --color-text-light: #999999;
+  /* Brand colors from logo */
+  --color-brand-red: #C22B2B;
+  --color-brand-red-dark: #9B1E1E;
+  --color-brand-red-light: #E84545;
+  --color-brand-orange: #D97416;
+  --color-brand-orange-light: #F0943A;
+  --color-brand-cream: #FAF0E6;
+  --color-brand-cream-dark: #F0E0CC;
+  --color-brand-charcoal: #1A1A1A;
 
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'DM Sans', system-ui, sans-serif;
 }
 
 @layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
-    margin: 0;
     font-family: var(--font-sans);
-    color: var(--color-charcoal);
-    background: var(--color-cream);
+    color: var(--color-brand-charcoal);
+    background: #ffffff;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--color-brand-red);
+    color: white;
   }
 }
